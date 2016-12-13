@@ -1,9 +1,9 @@
-const request = require('superagent');
-const NossoLixoService = require('./NossoLixoService');
+import request from 'superagent';
+import NossoLixoService from './NossoLixoService';
 
 class PlaceService {
   constructor() {
-    this.endpoint = NossoLixoService.endpoint;
+    this.endpoint = NossoLixoService.endpoint();
   }
 
   all() {
