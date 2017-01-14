@@ -1,15 +1,13 @@
 import React from 'react';
+import _ from 'underscore';
 import {withGoogleMap, GoogleMap, Marker} from 'react-google-maps';
 import co from 'co';
 import PlaceService from '../services/PlaceService';
 
 const NossoLixoMap = withGoogleMap(props => (
   <GoogleMap
-    defaultZoom={12}
-    defaultCenter={{
-      lat: -10.9919196,
-      lng: -37.0984939
-    }}
+    zoom={props.zoom}
+    center={props.currentLocation}
   >
     {props.markers.map((marker, index) => (
       <Marker
@@ -24,18 +22,27 @@ const NossoLixoMap = withGoogleMap(props => (
 export default class Map extends React.Component {
   constructor () {
     super();
-    this.state = { markers: [] };
+    this.state = { markers: [], currentLocation: this.defaultLocation(), zoom: 4 };
+    this.isUnmounted = false;
 
+    _.bindAll(this, 'buildMarkers', 'getLocation', 'locationCallback');
+  }
+
+  componentDidMount() {
     var fn = co.wrap(function* (val) {
       return yield Promise.resolve(val);
     });
 
-    var placeService = new PlaceService(),
-        buildMarkers = this.buildMarkers.bind(this);
+    this.getLocation();
 
+    var placeService = new PlaceService();
     fn(placeService.all())
-      .then(buildMarkers)
+      .then(this.buildMarkers)
       .catch(this.rescueError);
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   buildMarkers(response) {
@@ -59,6 +66,30 @@ export default class Map extends React.Component {
     console.error(err.stack);
   }
 
+  defaultLocation() {
+    return {
+      lat: -11.996921,
+      lng: -51.957208
+    }
+  }
+
+  getLocation() {
+    if (!_.isUndefined(navigator) && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this.locationCallback);
+    }
+  }
+
+  locationCallback(position) {
+    if (this.isUnmounted) {
+      return;
+    }
+
+    this.setState({
+      currentLocation: { lat: position.coords.latitude, lng: position.coords.longitude },
+      zoom: 12
+    });
+  }
+
   render() {
     return (
       <NossoLixoMap
@@ -68,7 +99,8 @@ export default class Map extends React.Component {
         mapElement={
           <div style={{ height: `100%` }} />
         }
-        onMapLoad={this.handleMapLoad}
+        zoom={this.state.zoom}
+        currentLocation={this.state.currentLocation}
         markers={this.state.markers}
       />
     );
