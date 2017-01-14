@@ -2,7 +2,7 @@ var path = require('path');
 
 module.exports = {
   entry: {
-    app: ['./app/main.js']
+    app: ['babel-polyfill', './app/main.js']
   },
   output: {
     path: path.resolve(__dirname, 'build'),
