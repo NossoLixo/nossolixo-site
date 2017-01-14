@@ -1,7 +1,7 @@
 import request from 'superagent';
 import NossoLixoService from './NossoLixoService';
 
-class CategoryService {
+export default class CategoryService {
   constructor() {
     this.endpoint = NossoLixoService.endpoint();
   }
@@ -10,5 +10,3 @@ class CategoryService {
     return request.get(this.endpoint + '/categories');
   }
 }
-
-export default CategoryService;
