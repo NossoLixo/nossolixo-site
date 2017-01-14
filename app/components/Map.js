@@ -1,7 +1,8 @@
 import React from 'react';
 import _ from 'underscore';
-import {withGoogleMap, GoogleMap, Marker} from 'react-google-maps';
+import {withGoogleMap, GoogleMap, Marker, InfoWindow} from 'react-google-maps';
 import co from 'co';
+import $ from 'jquery';
 import PlaceService from '../services/PlaceService';
 
 const NossoLixoMap = withGoogleMap(props => (
@@ -9,13 +10,33 @@ const NossoLixoMap = withGoogleMap(props => (
     zoom={props.zoom}
     center={props.currentLocation}
   >
-    {props.markers.map((marker, index) => (
+    {props.markers.map((place, index) => (
       <Marker
-        title={marker.title}
-        position={marker.position}
+        title={place.name}
+        position={place.position}
         key={index}
         icon='/assets/images/icon.png'
-      />
+        defaultAnimation={4}
+        onClick={ () => props.onMarkerClick(index) }
+      >
+        {place.requestedInfo && (
+          <InfoWindow
+            onDomReady={props.onInfoWindowReady}
+            >
+            <div style={{ display: `none` }}>
+              <p><strong>{place.name}</strong></p>
+              <p>{place.description}</p>
+              <p>{place.street}, {place.number} - {place.district}. {place.city}/{place.state}</p>
+              <p>{place.phone_number}</p>
+              <p>{place.email}</p>
+              <p>{place.site}</p>
+              <br />
+              <p><strong>Coleta</strong></p>
+              <p>{place.categories.map(category => category.name).join(', ')}</p>
+            </div>
+          </InfoWindow>
+        )}
+      </Marker>
     ))}
   </GoogleMap>
 ));
@@ -26,7 +47,7 @@ export default class Map extends React.Component {
     this.state = { markers: [], currentLocation: this.defaultLocation(), zoom: 4 };
     this.isUnmounted = false;
 
-    _.bindAll(this, 'buildMarkers', 'getLocation', 'locationCallback');
+    _.bindAll(this, 'buildMarkers', 'getLocation', 'locationCallback', 'handleMarkerClick');
   }
 
   componentDidMount() {
@@ -48,18 +69,11 @@ export default class Map extends React.Component {
 
   buildMarkers(response) {
     var markers = [];
-
     response.body.forEach(function(place) {
-      var marker = {
-        title: place.name,
-        position: {
-          lat: Number.parseFloat(place.lat),
-          lng: Number.parseFloat(place.lng)
-        }
-      };
-      markers.push(marker);
-    });
-
+      place.position = { lat: Number.parseFloat(place.lat), lng: Number.parseFloat(place.lng) };
+      place.requestedInfo = false;
+      markers.push(place);
+    })
     this.setState({ markers: markers });
   }
 
@@ -91,6 +105,25 @@ export default class Map extends React.Component {
     });
   }
 
+  handleMarkerClick(placeIndex) {
+    var self = this;
+
+    this.state.markers.forEach(function(marker, index) {
+      if (index == placeIndex) {
+        marker.requestedInfo = true;
+      } else {
+        marker.requestedInfo = false;
+      }
+      self.state.markers[index] = marker;
+    });
+
+    this.setState({ markers: this.state.markers });
+  }
+
+  handleInfoWindowReady() {
+    $(this.content).find('div').fadeIn();
+  }
+
   render() {
     return (
       <NossoLixoMap
@@ -103,6 +136,8 @@ export default class Map extends React.Component {
         zoom={this.state.zoom}
         currentLocation={this.state.currentLocation}
         markers={this.state.markers}
+        onMarkerClick={this.handleMarkerClick}
+        onInfoWindowReady={this.handleInfoWindowReady}
       />
     );
   }
