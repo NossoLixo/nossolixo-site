@@ -14,6 +14,7 @@ const NossoLixoMap = withGoogleMap(props => (
         title={marker.title}
         position={marker.position}
         key={index}
+        icon='/assets/images/icon.png'
       />
     ))}
   </GoogleMap>
