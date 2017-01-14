@@ -18,11 +18,40 @@ $color: #8cb63c;
 
 .logo {
   background: url('/assets/images/logo.png') no-repeat;
+  background-size: 100%;
   width: 100px;
   height: 50px;
-  margin: 0 auto;
+  float: left;
+  display: block;
 
   .logo-text {
     display: none;
   }
+}
+
+.social-list {
+  float: right;
+  margin: 10px 25px 0 0;
+
+  .social-item {
+    display: block;
+    float: left;
+    margin-left: 5px;
+  }
+}
+
+.icon-facebook {
+  background: url('/assets/images/icon-facebook.svg') no-repeat;
+  background-size: 100%;
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
+.icon-github {
+  background: url('/assets/images/icon-github.svg') no-repeat;
+  background-size: 100%;
+  width: 32px;
+  height: 32px;
+  display: block;
 }
