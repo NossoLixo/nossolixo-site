@@ -1,4 +1,28 @@
 * { margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; }
 
+$color: #8cb63c;
+
 #app { width: 100%; height: 100%; }
+
+.toolbar {
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  background-color: $color;
+}
+
+.logo {
+  background: url('/assets/images/logo.png') no-repeat;
+  width: 100px;
+  height: 50px;
+  margin: 0 auto;
+
+  .logo-text {
+    display: none;
+  }
+}
