@@ -15,7 +15,7 @@ const NossoLixoMap = withGoogleMap(props => (
         title={place.name}
         position={place.position}
         key={index}
-        icon='/assets/images/icon.png'
+        icon='/public/images/icon.png'
         defaultAnimation={4}
         onClick={ () => props.onMarkerClick(index) }
       >

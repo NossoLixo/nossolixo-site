@@ -1,9 +1,19 @@
-* { margin: 0; padding: 0; }
-html, body { height: 100%; overflow: hidden; }
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
 
 $color: #8cb63c;
 
-#app { width: 100%; height: 100%; }
+#app {
+  width: 100%;
+  height: 100%;
+}
 
 .toolbar {
   position: absolute;
@@ -17,7 +27,7 @@ $color: #8cb63c;
 }
 
 .logo {
-  background: url('/assets/images/logo.png') no-repeat;
+  background: url('/public/images/logo.png') no-repeat;
   background-size: 100%;
   width: 100px;
   height: 50px;
@@ -41,7 +51,7 @@ $color: #8cb63c;
 }
 
 .icon-facebook {
-  background: url('/assets/images/icon-facebook.svg') no-repeat;
+  background: url('/public/images/icon-facebook.svg') no-repeat;
   background-size: 100%;
   width: 32px;
   height: 32px;
@@ -49,7 +59,7 @@ $color: #8cb63c;
 }
 
 .icon-github {
-  background: url('/assets/images/icon-github.svg') no-repeat;
+  background: url('/public/images/icon-github.svg') no-repeat;
   background-size: 100%;
   width: 32px;
   height: 32px;
