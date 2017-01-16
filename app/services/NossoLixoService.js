@@ -1,5 +1,5 @@
 export default class NossoLixoService {
   static endpoint() {
-    return 'https://nossolixo-api.herokuapp.com/v1';
+    return 'http://api.nossolixo.com.br/v1';
   }
 }
